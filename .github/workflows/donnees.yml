@@ -15,7 +15,7 @@ concurrency:
 jobs:
   publier:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
@@ -28,7 +28,7 @@ jobs:
           mkdir -p _site && cp index.html _site/ && touch _site/.nojekyll
           O="${GITHUB_REPOSITORY_OWNER,,}"; R="${GITHUB_REPOSITORY#*/}"
           if [ "${R,,}" = "$O.github.io" ]; then BASE="https://$O.github.io"; else BASE="https://$O.github.io/$R"; fi
-          bash outils/maj_donnees.sh "$PWD/_site" "$BASE"
+          timeout 900 bash outils/maj_donnees.sh "$PWD/_site" "$BASE" || true
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
