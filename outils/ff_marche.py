@@ -22,6 +22,6 @@ for p in S.split():
     try:
         r=get('https://query1.finance.yahoo.com/v8/finance/chart/%s?range=3mo&interval=1d'%urllib.parse.quote(y,safe=''),20)
         if isinstance(r,dict) and r.get('chart',{}).get('result'):d[k]=r
-    except Exception as e:print('yahoo',k,'échec',e)
+    except Exception as e:print('yahoo',k,'échec',e,flush=True)
     time.sleep(.4)
 if d:put('market.js','MKT',{'ts':ts,'d':d});print('marché ok',len(d))

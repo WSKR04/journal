@@ -4,6 +4,8 @@
 SITE="$1"; BASE="$2"; HERE="$(cd "$(dirname "$0")" && pwd)"
 export HOME="${RUNNER_TEMP:-/tmp}/journal-home"; D="$HOME/Library/Application Support/TradingJournal"; P="$HOME/prec"
 mkdir -p "$D" "$P" "$SITE/Données"
+LOGF="$SITE/Données/etat.txt"; exec > >(tee "$LOGF") 2>&1
+echo "Début $(date -u)"
 FILES="ff_calendar.js market.js news.js intraday.js retail.js cot.js season.js macro.js rates.js"
 # 1) Données déjà en ligne = filet de sécurité si une source échoue
 for f in $FILES; do curl -sfL --max-time 60 "$BASE/Donn%C3%A9es/$f" -o "$P/$f" || rm -f "$P/$f"; done
@@ -19,3 +21,5 @@ for f in $FILES; do
   if [ -s "$D/$f" ]; then cp -f "$D/$f" "$SITE/Données/$f"; elif [ -s "$P/$f" ]; then cp -f "$P/$f" "$SITE/Données/$f"; fi
 done
 ls -la "$SITE/Données"
+for l in "$D"/*.log; do [ -f "$l" ] && { echo "== $(basename "$l")"; tail -n 40 "$l"; }; done
+echo "Fin $(date -u)"
