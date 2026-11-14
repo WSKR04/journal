@@ -12,10 +12,14 @@ for f in $FILES; do curl -sfL --max-time 60 "$BASE/Donn%C3%A9es/$f" -o "$P/$f" |
 M=$((10#$(date -u +%M))); H=$((10#$(date -u +%H))); F="${FORCE:-0}"
 # 2) Actualités RSS + bougies 1 h + sentiment particuliers : à chaque passage
 bash "$HERE/news_update.sh" || true
-# 3) Calendrier + cours journaliers : toutes les heures
-if [ "$F" = 1 ] || [ $M -lt 15 ] || [ ! -f "$P/ff_calendar.js" ] || [ ! -f "$P/market.js" ]; then python3 "$HERE/ff_marche.py" "$D" || true; fi
+# 3) Calendrier : toutes les heures
+if [ "$F" = 1 ] || [ $M -lt 15 ] || [ ! -f "$P/ff_calendar.js" ]; then python3 "$HERE/ff_marche.py" "$D" || true; fi
 # 4) COT, saisonnalité, macro, taux : toutes les 6 heures
-if [ "$F" = 1 ] || { [ $((H % 6)) -eq 0 ] && [ $M -lt 15 ]; } || [ ! -f "$P/cot.js" ]; then bash "$HERE/data_update.sh" || true; fi
+if [ "$F" = 1 ] || { [ $((H % 6)) -eq 0 ] && [ $M -lt 15 ]; } || [ ! -f "$P/cot.js" ] || [ ! -f "$P/macro.js" ]; then bash "$HERE/data_update.sh" || true; fi
+# 4b) Cours Yahoo (session avec cookie, sinon erreurs 429) : bougies 1 h à chaque passage, journalier toutes les heures, saisonnalité + taux toutes les 6 h
+Y="intraday"; if [ "$F" = 1 ] || [ $M -lt 15 ] || [ ! -f "$P/market.js" ]; then Y="$Y market"; fi
+if [ "$F" = 1 ] || { [ $((H % 6)) -eq 0 ] && [ $M -lt 15 ]; } || [ ! -f "$P/season.js" ] || [ ! -f "$P/rates.js" ]; then Y="$Y season rates"; fi
+python3 "$HERE/yahoo_web.py" "$D" $Y || true
 # 5) Publier : données fraîches, sinon les précédentes
 for f in $FILES; do
   if [ -s "$D/$f" ]; then cp -f "$D/$f" "$SITE/Données/$f"; elif [ -s "$P/$f" ]; then cp -f "$P/$f" "$SITE/Données/$f"; fi

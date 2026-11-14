@@ -4,7 +4,7 @@
 DIR="$HOME/Library/Application Support/TradingJournal"; mkdir -p "$DIR"
 LOG="$DIR/data_update.log"; UA="Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15"
 JD="$(cat "$DIR/news_journal_dir" 2>/dev/null)"
-put(){ mv -f "$1.tmp" "$DIR/$1"; [ -n "$JD" ] && [ -d "$JD/Données" ] && cp -f "$DIR/$1" "$JD/Données/$1" 2>/dev/null; }
+put(){ mv -f "$DIR/$1.tmp" "$DIR/$1"; [ -n "$JD" ] && [ -d "$JD/Données" ] && cp -f "$DIR/$1" "$JD/Données/$1" 2>/dev/null; }
 ok(){ case "$1" in \[*|\{*) return 0;; *) return 1;; esac; }
 # --- COT (Legacy, futures only) : 2 ans, marchés suivis
 CODES="'099741','096742','097741','092741','090741','232741','112741','095741','098662','088691','084691','067651','13874A','209742','124603','133741'"
