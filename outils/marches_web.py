@@ -5,8 +5,8 @@
 # Usage : marches_web.py <dossier> <market|intraday|season> [...]
 import json,sys,time,datetime,os,urllib.request,csv,io,math
 UA='Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15'
-def get(u,t=30):
-    for i in range(3):
+def get(u,t=30,n=3):
+    for i in range(n):
         try:
             with urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':UA}),timeout=t) as f:return f.read().decode('utf-8','replace')
         except Exception as e:
@@ -21,8 +21,12 @@ def kraken(pair,itv):
     k=[x for x in j['result'] if x!='last'][0]
     return {int(r[0]):(float(r[1]),float(r[2]),float(r[3]),float(r[4])) for r in j['result'][k]}
 # ---------- FRED ----------
+FB=[0]  # échecs FRED d'affilée : FRED ralentit parfois les serveurs cloud -> abandon rapide
 def fred(sid,since):
-    t=get('https://fred.stlouisfed.org/graph/fredgraph.csv?id=%s&cosd=%s'%(sid,since),60);time.sleep(.5)
+    if FB[0]>=2:raise Exception('FRED injoignable depuis ce serveur, ignoré')
+    try:t=get('https://fred.stlouisfed.org/graph/fredgraph.csv?id=%s&cosd=%s'%(sid,since),20,1);FB[0]=0
+    except Exception:FB[0]+=1;raise
+    time.sleep(.5)
     out={}
     for r in csv.reader(io.StringIO(t)):
         if len(r)<2 or r[1] in ('','.') or not r[0][:1].isdigit():continue
@@ -31,6 +35,21 @@ def fred(sid,since):
         d=datetime.datetime.strptime(r[0][:10],'%Y-%m-%d').replace(tzinfo=datetime.timezone.utc)
         out[int(d.timestamp())]=(v,v,v,v)
     return out
+# ---------- CBOE (indices US, VIX, taux 10 ans ; OHLC depuis 1975, sans clé) ----------
+CB={}
+def cboe(sym,mult=1.0):
+    if sym not in CB:
+        j=json.loads(get('https://cdn-api.cboe.com/api/global/delayed_quotes/charts/historical/%s.json'%sym,60))
+        out={}
+        for r in j.get('data',[]):
+            try:
+                c=float(r['close'])*mult;o=float(r['open'])*mult or c;h=float(r['high'])*mult or c;l=float(r['low'])*mult or c
+                d=datetime.datetime.strptime(r['date'][:10],'%Y-%m-%d').replace(tzinfo=datetime.timezone.utc)
+                if c>0:out[int(d.timestamp())]=(o,h,l,c)
+            except Exception:pass
+        CB[sym]=out;time.sleep(.5)
+    return CB[sym]
+CBS={'US500':('_SPX',1),'NAS100':('_NDX',1),'US30':('_DJX',100),'VIX':('_VIX',1),'US10Y':('_TNX',.1)}
 def inv(s):return {t:(1/o,1/l,1/h,1/c) for t,(o,h,l,c) in s.items() if o and l and h and c}
 def mul(a,b):
     return {t:(a[t][0]*b[t][0],a[t][1]*b[t][1],a[t][2]*b[t][2],a[t][3]*b[t][3]) for t in a if t in b}
@@ -69,12 +88,15 @@ def crosses(S):
             if r:S[k]=r
     d=dxy(S)
     if d:S['DXY']=d
-FREDD={'US500':'SP500','NAS100':'NASDAQ100','US30':'DJIA','JP225':'NIKKEI225','VIX':'VIXCLS','US10Y':'DGS10','USOIL':'DCOILWTICO','UKOIL':'DCOILBRENTEU','NATGAS':'DHHNGSP','NZDUSD':'DEXUSNZ'}
+FREDD={'NZDUSD':'DEXUSNZ','USOIL':'DCOILWTICO','UKOIL':'DCOILBRENTEU','NATGAS':'DHHNGSP','JP225':'NIKKEI225'}
 def market(D):
     S={}
     for k,p in KR.items():
         try:S[k]=dayk(kraken(p,1440))
         except Exception as e:log('kraken',k,'échec',e)
+    for k,(sy,m) in CBS.items():
+        try:S[k]=cboe(sy,m)
+        except Exception as e:log('cboe',k,'échec',e)
     since=(datetime.date.today()-datetime.timedelta(days=200)).isoformat()
     for k,sid in FREDD.items():
         try:S[k]=fred(sid,since)
@@ -101,7 +123,7 @@ def intraday(D):
     log('intraday',len(d),'actifs :',' '.join(sorted(d)))
     if d:put(D,'intraday.js','INTRA_RAW',{'ts':ts(),'d':d})
 FREDL={'EURUSD':('DEXUSEU',0),'GBPUSD':('DEXUSUK',0),'USDJPY':('DEXJPUS',0),'USDCHF':('DEXSZUS',0),'AUDUSD':('DEXUSAL',0),'USDCAD':('DEXCAUS',0),'NZDUSD':('DEXUSNZ',0),
-       'DXY':('DTWEXBGS',0),'US500':('SP500',0),'NAS100':('NASDAQ100',0),'US30':('DJIA',0),'USOIL':('DCOILWTICO',0)}
+       'DXY':('DTWEXBGS',0),'USOIL':('DCOILWTICO',0)}
 def monthly(s):
     m={}
     for t in sorted(s):
@@ -111,13 +133,18 @@ def monthly(s):
         else:m[k][1]=max(m[k][1],h);m[k][2]=min(m[k][2],l);m[k][3]=c
     return {k:tuple(v) for k,v in m.items()}
 def season(D):
-    since=(datetime.date.today()-datetime.timedelta(days=365*20+10)).isoformat();d={}
+    since=(datetime.date.today()-datetime.timedelta(days=365*20+10)).isoformat();d={};lim=int(time.time())-(365*20+10)*86400
+    for k in ('US500','NAS100','US30'):
+        try:
+            sy,m=CBS[k];s=monthly({t:v for t,v in cboe(sy,m).items() if t>=lim})
+            if len(s)>24:d[k]=chart(k,s,'1mo')
+        except Exception as e:log('cboe saison',k,'échec',e)
     for k,(sid,_) in FREDL.items():
         try:
             s=monthly(fred(sid,since))
             if len(s)>24:d[k]=chart(k,s,'1mo')
         except Exception as e:log('fred saison',k,'échec',e)
-    for k in ('XAUUSD','BTCUSD'):
+    for k in ['XAUUSD','BTCUSD']+[x for x in ('EURUSD','GBPUSD','USDJPY','USDCHF','AUDUSD','USDCAD') if x not in d]:
         try:
             s=monthly(dayk(kraken(KR[k],1440)))
             if len(s)>12:d[k]=chart(k,s,'1mo')
