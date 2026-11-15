@@ -1665,10 +1665,10 @@ function vDash(v){
    '<div class="card c6" id="insCard"></div><div class="card c6" id="formCard"></div><div class="card c12" id="heatCard"></div><div class="card c12" id="dqCard"></div>'+
    '<div class="card c4" id="goalCard"></div><div class="card c8" id="feesCard"></div>'+
    '<div class="card c6" id="maeCard"></div><div class="card c6" id="planCard"></div>'+
-   '<div class="card c12" id="axCard"></div><div class="card c12" id="finCard"></div>'+
+   '<div class="card c12" id="pbCard"></div><div class="card c12" id="axCard"></div><div class="card c12" id="finCard"></div>'+
    '<div class="card c12" id="simCard"></div><div class="card c12" id="mcCard"></div>'+
    '<div class="card c12" id="tradesCard"></div></div>';
-  drawEq(c,sr);drawLimits();drawCal();drawWL(c,wins,loss,gp,gl);drawSplit(c);drawQual(c);drawStats(c);drawDist(c);drawRules();drawIns(c);drawDq();drawForm(c);drawHeat(c);drawGoals();drawFees(c);drawMae(c);drawPlan(c);drawAx(c);drawFin();drawSim();drawMc();drawTrades();applySub();
+  drawEq(c,sr);drawLimits();drawCal();drawWL(c,wins,loss,gp,gl);drawSplit(c);drawQual(c);drawStats(c);drawDist(c);drawRules();drawIns(c);drawDq();drawForm(c);drawHeat(c);drawGoals();drawFees(c);drawMae(c);drawPlan(c);drawAx(c);drawFin();drawPb();drawSim();drawMc();drawTrades();applySub();
 }
 
 /* courbe de performance */
@@ -3010,8 +3010,8 @@ function vNews(v){
     '<div class="card c6" id="rgCard"></div><div class="card c6" id="mkCard"></div><div class="card c12" id="rgStats"></div><div class="card c12" id="shCard"></div>'+
     '<div class="card c12" id="srcCard"><header><h3>Sources et directs</h3><button class="btn sm" data-act="fomcAdd">Ajouter les banques centrales à venir</button></header><div class="mut sm">Liens officiels vers les conférences de presse, calendriers et fils d\'actualité (nouvel onglet). L\'artefact n\'a pas de flux en direct : note les titres dans « Titres » ou demande à Claude de structurer un calendrier copié. Dates : sites officiels Fed, BCE, BoE, BoJ, BoC, RBA, RBNZ et SNB (vérifiées le 24 octobre 2026) ; la décision de la SNB est confirmée par un calendrier tiers.</div>'+srcHub()+'</div>'+(SAMPLE?'<div class="card c12" id="ainCard"><header><h3>Analyser une info avec Claude</h3></header><div class="field"><label for="ai-news">Colle un titre, un communiqué ou un chiffre publié</label><textarea id="ai-news" rows="3" placeholder="Ex. : US CPI m/m 0,4 % contre 0,3 % attendu…">'+esc(S.ai.in||'')+'</textarea></div><div class="actions" style="margin-top:10px"><button class="btn primary" data-act="aiNews"'+(S.ai.busy?' disabled':'')+'>Analyser l\'impact</button></div><div id="ai-news-out" class="aiout" style="margin-top:12px">'+esc(S.ai.kind==='news'?S.ai.text:'')+'</div></div>':'')+'</div>';
   drawEvList();drawMacro();drawRegime();drawMkt();drawRegStats();drawFeedStatus();applySub()}
-var SUBS={dash:[['synth','🏠 Vue d’ensemble'],['trades','📒 Trades'],['perf','📈 Performance'],['disc','🧘 Discipline'],['fin','💼 Finances'],['sim','🎲 Simulations'],['all','🗂️ Tout']],live:[['prep','🌅 Préparer'],['start','🧭 Départ'],['trade','⚡ Trader'],['bilan','📝 Bilan'],['all','🗂️ Tout']],news:[['cockpit','🎛️ Cockpit'],['cal','📅 Calendrier'],['stats','📊 Statistiques'],['src','🔗 Sources'],['all','🗂️ Tout']],learn:[['road','🗺️ Roadmap'],['struct','🧱 Structure'],['liq','💧 Liquidity'],['sweep','🧹 Sweep'],['disp','⚡ Displacement'],['fvg','🕳️ FVG'],['ob','📦 Order Blocks'],['breaker','🔁 Breakers'],['pd','⚖️ Premium / Discount'],['time','⏰ Killzones'],['po3','🕛 Power of 3'],['smt','🔀 SMT'],['entry','🎯 Entry Models'],['mmm','🏦 MM Model'],['wyck','📐 Wyckoff'],['risk','🛡️ Risk'],['mine','🧠 My Systems'],['gloss','📖 Glossary'],['all','🗂️ All']]};
-var GRP={dash:{axCard:'perf',finCard:'fin',kpiRow:'synth',eqCard:'synth',ftmoCard:'synth',calCard:'synth',wlCard:'perf',insCard:'synth',tradesCard:'trades',splitCard:'perf',statCard:'perf',distCard:'perf',formCard:'perf',heatCard:'perf',goalCard:'perf',feesCard:'perf',qualCard:'disc',dqCard:'disc',maeCard:'disc',planCard:'disc',simCard:'sim',mcCard:'sim'},
+var SUBS={dash:[['synth','🏠 Vue d’ensemble'],['trades','📒 Trades'],['perf','📈 Performance'],['pb','📘 Playbook'],['disc','🧘 Discipline'],['fin','💼 Finances'],['sim','🎲 Simulations'],['all','🗂️ Tout']],live:[['prep','🌅 Préparer'],['start','🧭 Départ'],['trade','⚡ Trader'],['bilan','📝 Bilan'],['all','🗂️ Tout']],news:[['cockpit','🎛️ Cockpit'],['cal','📅 Calendrier'],['stats','📊 Statistiques'],['src','🔗 Sources'],['all','🗂️ Tout']],learn:[['road','🗺️ Roadmap'],['struct','🧱 Structure'],['liq','💧 Liquidity'],['sweep','🧹 Sweep'],['disp','⚡ Displacement'],['fvg','🕳️ FVG'],['ob','📦 Order Blocks'],['breaker','🔁 Breakers'],['pd','⚖️ Premium / Discount'],['time','⏰ Killzones'],['po3','🕛 Power of 3'],['smt','🔀 SMT'],['entry','🎯 Entry Models'],['mmm','🏦 MM Model'],['wyck','📐 Wyckoff'],['risk','🛡️ Risk'],['mine','🧠 My Systems'],['gloss','📖 Glossary'],['all','🗂️ All']]};
+var GRP={dash:{pbCard:'pb',axCard:'perf',finCard:'fin',kpiRow:'synth',eqCard:'synth',ftmoCard:'synth',calCard:'synth',wlCard:'perf',insCard:'synth',tradesCard:'trades',splitCard:'perf',statCard:'perf',distCard:'perf',formCard:'perf',heatCard:'perf',goalCard:'perf',feesCard:'perf',qualCard:'disc',dqCard:'disc',maeCard:'disc',planCard:'disc',simCard:'sim',mcCard:'sim'},
   live:{startCard:'start',mkdCard:'start prep',riskCard:'start trade',evCard:'start trade',clockCard:'start',quickCard:'trade',openCard:'start trade',sentCard:'trade',lvlCard:'trade',expCard:'start trade',brfCard:'start prep',tzCard:'prep',preCard:'start prep',spCard:'prep',wpCard:'prep',feedCard:'prep',sqCard:'trade',mtCard:'trade start',alfTerm:'prep bilan',alfCard:'trade',aiCard:'prep bilan',bilCard:'bilan',wkCard:'bilan'},
   learn:{lrRoad:'road',lrStruct:'struct',lrLiq:'liq',lrFvg:'fvg',lrOb:'ob',lrPd:'pd',lrTime:'time',lrEntry:'entry',lrRisk:'risk',lrSweep:'sweep',lrDisp:'disp',lrBreaker:'breaker',lrPo3:'po3',lrSmt:'smt',lrMmm:'mmm',lrWyck:'wyck',lrMine:'mine road',lrGloss:'gloss'},
   news:{mcRisk:'cockpit',mcBaro:'cockpit',mcRead:'cockpit',sentCard:'cockpit',rgCard:'cockpit',mkCard:'cockpit cal',clCard:'cal',nlCard:'cal',shCard:'stats',rgStats:'stats',ntCard:'stats',esCard:'stats',hlCard:'src',nfCard:'src',srcCard:'src',ainCard:'src'}};
@@ -4148,7 +4148,7 @@ document.addEventListener('click',async function(e){
     for(var y=0;y<accs.length;y++){if(!accs[y]||!okId(accs[y].id))continue;await store.acct(accs[y]);var ia=-1;S.accounts.forEach(function(x,i3){if(x.id===accs[y].id)ia=i3});if(ia>=0)S.accounts[ia]=accs[y];else S.accounts.push(accs[y])}
     for(var q=0;q<o.trades.length;q++){var tr=o.trades[q];if(!tr||!okId(tr.id))continue;cleanTrade(tr);if(tr.acct!=null&&!okId(tr.acct))continue;if(!tr.acct&&S.acctId)tr.acct=S.acctId;var ex0=S.trades.filter(function(x){return x.id===tr.id})[0];if(ex0&&+ex0.updatedAt>0&&+tr.updatedAt>0&&+ex0.updatedAt>+tr.updatedAt)continue;await store.save(tr);var ix2=-1;S.trades.forEach(function(x,i4){if(x.id===tr.id)ix2=i4});if(ix2>=0)S.trades[ix2]=tr;else S.trades.push(tr)}
     var dls=Array.isArray(o.days)?o.days:[];for(var z2=0;z2<dls.length;z2++){if(!dls[z2]||!okId(dls[z2].id))continue;await store.day(dls[z2]);S.days[dls[z2].id]=dls[z2]}
-    var nws=Array.isArray(o.news)?o.news:[];for(var z3=0;z3<nws.length;z3++){if(!nws[z3]||!okId(nws[z3].id)||['event','headline','sess','lrn','lrnp','fin','finb'].indexOf(nws[z3].kind)<0)continue;var ex1=S.news[nws[z3].id];if(ex1&&ex1.upd&&nws[z3].upd&&String(ex1.upd)>String(nws[z3].upd))continue;S.news[nws[z3].id]=nws[z3];await store.news(nws[z3])}
+    var nws=Array.isArray(o.news)?o.news:[];for(var z3=0;z3<nws.length;z3++){if(!nws[z3]||!okId(nws[z3].id)||['event','headline','sess','lrn','lrnp','fin','finb','pb'].indexOf(nws[z3].kind)<0)continue;var ex1=S.news[nws[z3].id];if(ex1&&ex1.upd&&nws[z3].upd&&String(ex1.upd)>String(nws[z3].upd))continue;S.news[nws[z3].id]=nws[z3];await store.news(nws[z3])}
     setCur();lrpSync();toast('✅ Fusion terminée : '+o.trades.length+' trades, '+nws.length+' éléments de news / apprentissage');closeModal();render()}
   else if(act==='wipe'){S.confirmDel=true;vData($('#mbody'))}
   else if(act==='wipeOk'){var all=T(),aid2=S.acctId;for(var z=0;z<all.length;z++)await store.remove(all[z].id);S.trades=S.trades.filter(function(x){return x.acct!==aid2});S.confirmDel=false;toast('Journal du compte vidé');closeModal();render()}
@@ -4991,6 +4991,65 @@ document.addEventListener('pointermove',function(e){if(e.pointerType!=='mouse'||
  document.head.appendChild(st)})();
 function odoScan(){if(REDM())return;var M=odoScan.m||(odoScan.m={});$$('.kt b:not([data-cu])').forEach(function(el){var k=((el.parentNode.querySelector('h3')||{}).textContent||'')+'|'+S.view,v=el.textContent;if(M[k]===v){el.dataset.cu=1;return}M[k]=v;odoRoll(el)})}
 new MutationObserver(function(){sxEnh();clearTimeout(odoScan.t);odoScan.t=setTimeout(odoScan,40)}).observe(document.body,{childList:true,subtree:true});
+
+/* v74 — Playbook : setups avec règles, cochage règle par règle sur les trades, statistiques de respect */
+function pbq(){return pbq.v||(pbq.v={open:null,edit:null,del:null,pre:''})}
+function pbNorm(x){return String(x||'').trim().toLowerCase()}
+function pbDocs(){return newsDocs('pb').filter(function(d){return d&&d.name}).sort(function(a,b){return a.name.localeCompare(b.name)})}
+function pbTrades(p){var n=pbNorm(p.name);return allClosed().filter(function(t){return pbNorm(t.setup)===n})}
+function pbScore(t,p){var k=(p.rules||[]).length;if(!k||!Array.isArray(t.pbr))return null;return t.pbr.filter(function(i){return i>=0&&i<k}).length/k}
+function pbStat(L){var n=L.length,w=L.filter(function(t){return (netOf(t)||0)>0}).length,net=sum(L.map(function(t){return netOf(t)||0})),rs=L.map(rOf).filter(function(x){return x!=null});return {n:n,wr:n?w/n*100:null,net:net,r:rs.length?sum(rs)/rs.length:null}}
+function pbKpi(lab,val,c){return '<div style="min-width:92px"><div class="mut sm">'+lab+'</div><div class="mono '+(c||'')+'" style="font-weight:600">'+val+'</div></div>'}
+function drawPb(){
+  var el=$('#pbCard');if(!el)return;var Q=pbq(),P=pbDocs();
+  var h='<header><h2>Playbook</h2><button class="btn sm primary" data-act="pbNew">＋ Nouveau setup</button></header>'+
+   '<div class="mut sm" style="margin-bottom:10px">Décris chaque setup avec ses règles, puis coche sur tes trades les règles respectées : tu vois ce que rapporte la discipline, setup par setup.</div>';
+  if(Q.edit){var d=Q.edit==='new'?{name:Q.pre||'',desc:'',rules:[]}:(S.news[Q.edit]||{});
+    var names=SETUPS.concat(allClosed().map(function(t){return t.setup||''})).filter(function(x,i,a){return x&&a.indexOf(x)===i});
+    h+='<div class="card" style="margin-bottom:12px"><div class="fields" style="display:grid;gap:10px">'+
+     '<label class="sm">Nom du setup (le même que dans tes fiches trade)<br><input id="pbName" list="pbNames" maxlength="80" style="width:100%" value="'+esc(d.name||'')+'"><datalist id="pbNames">'+names.map(function(n){return '<option value="'+esc(n)+'">'}).join('')+'</datalist></label>'+
+     '<label class="sm">Description (contexte, marché, unité de temps)<br><textarea id="pbDesc" rows="2" maxlength="600" style="width:100%">'+esc(d.desc||'')+'</textarea></label>'+
+     '<label class="sm">Règles, une par ligne (max. 12)<br><textarea id="pbRules" rows="6" maxlength="1500" style="width:100%" placeholder="Biais H4 dans le sens du trade&#10;Prise de liquidité avant l\'entrée&#10;Entrée dans une killzone&#10;R:R ≥ 2">'+esc((d.rules||[]).join('\n'))+'</textarea></label>'+
+     '<div style="display:flex;gap:8px"><button class="btn primary" data-act="pbSave">Enregistrer</button><button class="btn" data-act="pbCancel">Annuler</button></div></div></div>'}
+  if(!P.length&&!Q.edit){
+    var used=allClosed().map(function(t){return t.setup||''}).filter(function(x,i,a){return x&&a.indexOf(x)===i});
+    el.innerHTML=h+'<div class="empty">Aucun setup dans ton playbook.'+(used.length?' Setups déjà utilisés : '+used.slice(0,6).map(function(u){return '<button class="btn sm" data-act="pbNew" data-v="'+esc(u)+'">＋ '+esc(u)+'</button>'}).join(' '):'')+'</div>';return}
+  var rows=P.map(function(p){
+    var L=pbTrades(p),st=pbStat(L),sc=L.map(function(t){return pbScore(t,p)}).filter(function(x){return x!=null}),adh=sc.length?sum(sc)/sc.length*100:null;
+    var full=L.filter(function(t){return pbScore(t,p)===1}),part=L.filter(function(t){var s=pbScore(t,p);return s!=null&&s<1}),sf=pbStat(full),sp=pbStat(part),op=Q.open===p.id,k=(p.rules||[]).length;
+    var r='<div class="card" style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap"><div style="min-width:0"><b style="font-size:15px">📘 '+esc(p.name)+'</b>'+(p.desc?'<div class="mut sm">'+esc(p.desc)+'</div>':'')+'</div>'+
+     '<div style="display:flex;gap:6px"><button class="btn sm" data-act="pbOpen" data-id="'+esc(p.id)+'">'+(op?'Replier':'Détails')+'</button><button class="btn sm" data-act="pbEdit" data-id="'+esc(p.id)+'">Modifier</button><button class="btn sm" data-act="pbDel" data-id="'+esc(p.id)+'">'+(Q.del===p.id?'Confirmer ?':'✕')+'</button></div></div>'+
+     '<div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:10px">'+pbKpi('Trades',st.n)+pbKpi('Réussite',st.wr==null?'—':fmt(st.wr,0)+' %',st.wr==null?'':(st.wr>=50?'pos':'neg'))+pbKpi('Net',money(st.net),cls(st.net))+pbKpi('R moyen',fmtR(st.r),cls(st.r))+pbKpi('Respect des règles',adh==null?'—':fmt(adh,0)+' %',adh==null?'':(adh>=80?'pos':(adh<50?'neg':'')))+'</div>';
+    if(full.length&&part.length)r+='<div class="sm" style="margin-top:8px;padding:8px 10px;border-radius:8px;background:var(--surface2)">Règles toutes respectées : <b class="'+cls(sf.r)+'">'+fmtR(sf.r)+'</b> en moyenne ('+fmt(sf.wr,0)+' % de réussite, '+full.length+' trades) · sinon : <b class="'+cls(sp.r)+'">'+fmtR(sp.r)+'</b> ('+fmt(sp.wr,0)+' %, '+part.length+' trades)</div>';
+    if(op){
+      if(k){r+='<h3 class="sm" style="margin:12px 0 6px">Règles</h3><ol style="margin:0;padding-left:20px">'+p.rules.map(function(rl,i){var tg=L.filter(function(t){return Array.isArray(t.pbr)}),ok=tg.filter(function(t){return t.pbr.indexOf(i)>=0}),sok=pbStat(ok),sno=pbStat(tg.filter(function(t){return t.pbr.indexOf(i)<0}));
+        return '<li class="sm" style="margin:3px 0">'+esc(rl)+(tg.length?' <span class="mut">— respectée '+fmt(ok.length/tg.length*100,0)+' % · R moyen '+fmtR(sok.r)+' si respectée, '+fmtR(sno.r)+' sinon</span>':'')+'</li>'}).join('')+'</ol>'}
+      else r+='<div class="mut sm" style="margin-top:8px">Ajoute des règles (Modifier) pour pouvoir les cocher sur tes trades.</div>';
+      if(L.length&&k){var LL=L.slice(-20).reverse();
+        r+='<h3 class="sm" style="margin:12px 0 6px">Coche les règles respectées ('+LL.length+' derniers trades)</h3><div class="scroll"><table><thead><tr><th>Date</th><th>Instrument</th><th class="r">Résultat</th>'+p.rules.map(function(rl,i){return '<th class="r" title="'+esc(rl)+'">'+(i+1)+'</th>'}).join('')+'<th class="r">Score</th></tr></thead><tbody>'+
+         LL.map(function(t){var s=pbScore(t,p);return '<tr><td class="mono">'+esc(dmy(day(t)))+'</td><td>'+esc(t.instrument||'')+'</td><td class="r mono '+cls(netOf(t))+'">'+money(netOf(t))+'</td>'+p.rules.map(function(rl,i){var on=Array.isArray(t.pbr)&&t.pbr.indexOf(i)>=0;return '<td class="r"><input type="checkbox" data-pbt="'+esc(t.id)+'" data-pbi="'+i+'" data-pbp="'+esc(p.id)+'"'+(on?' checked':'')+' aria-label="'+esc(rl)+'"></td>'}).join('')+'<td class="r mono">'+(s==null?'—':fmt(s*100,0)+' %')+'</td></tr>'}).join('')+'</tbody></table></div>'}
+      else if(!L.length)r+='<div class="mut sm" style="margin-top:8px">Aucun trade clôturé avec le setup « '+esc(p.name)+' ».</div>'}
+    return r+'</div>'}).join('');
+  var have=P.map(function(p){return pbNorm(p.name)}),miss=allClosed().map(function(t){return t.setup||''}).filter(function(x,i,a){return x&&a.indexOf(x)===i&&have.indexOf(pbNorm(x))<0});
+  el.innerHTML=h+rows+(miss.length?'<div class="mut sm">Setups utilisés sans fiche : '+miss.slice(0,8).map(function(u){return '<button class="btn sm" data-act="pbNew" data-v="'+esc(u)+'">＋ '+esc(u)+'</button>'}).join(' ')+'</div>':'')}
+async function pbAct(a,el){var Q=pbq();
+  if(a==='pbNew'){Q.edit='new';Q.pre=el.dataset.v||'';drawPb();var c=$('#pbCard');if(c)c.scrollIntoView({block:'start',behavior:'smooth'})}
+  else if(a==='pbEdit'){Q.edit=el.dataset.id;drawPb()}
+  else if(a==='pbCancel'){Q.edit=null;drawPb()}
+  else if(a==='pbOpen'){Q.open=Q.open===el.dataset.id?null:el.dataset.id;drawPb()}
+  else if(a==='pbSave'){var nm=String(($('#pbName')||{}).value||'').trim().slice(0,80);if(!nm){toast('Donne un nom au setup');return}
+    var rules=String(($('#pbRules')||{}).value||'').split('\n').map(function(x){return x.trim().slice(0,160)}).filter(Boolean).slice(0,12);
+    var id=Q.edit!=='new'&&S.news[Q.edit]?Q.edit:('pb_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6));
+    var dup=pbDocs().filter(function(p){return p.id!==id&&pbNorm(p.name)===pbNorm(nm)})[0];if(dup){toast('Ce setup a déjà une fiche');return}
+    var doc={id:id,kind:'pb',name:nm,desc:String(($('#pbDesc')||{}).value||'').trim().slice(0,600),rules:rules,upd:nowFull().slice(0,16)};
+    S.news[id]=doc;await store.news(doc);Q.edit=null;Q.open=id;toast('Setup enregistré');drawPb()}
+  else if(a==='pbDel'){var id2=el.dataset.id;if(Q.del!==id2){Q.del=id2;drawPb();setTimeout(function(){if(Q.del===id2){Q.del=null;drawPb()}},4000);return}
+    Q.del=null;if(S.news[id2]&&S.news[id2].kind==='pb'){delete S.news[id2];await store.rmNews(id2);toast('Fiche supprimée (tes trades ne changent pas)')}drawPb()}}
+document.addEventListener('click',function(e){var el=e.target.closest&&e.target.closest('[data-act]');if(!el)return;var a=el.dataset.act;if(/^pb[A-Z]/.test(a))pbAct(a,el)});
+document.addEventListener('change',async function(e){var c=e.target;if(!c||!c.dataset||c.dataset.pbt==null)return;
+  var t=S.trades.filter(function(x){return x.id===c.dataset.pbt})[0],p=S.news[c.dataset.pbp];if(!t||!p)return;var i=+c.dataset.pbi;
+  var a=Array.isArray(t.pbr)?t.pbr.filter(function(x){return x!==i&&x<(p.rules||[]).length}):[];if(c.checked)a.push(i);a.sort(function(x,y){return x-y});
+  t.pbr=a;t.updatedAt=Date.now();await store.save(JSON.parse(JSON.stringify(t)));drawPb()});
 
 })();
 </script>
