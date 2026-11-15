@@ -819,6 +819,19 @@ tbody tr:hover{background:color-mix(in srgb,var(--accent) 6%,transparent)}
  input[type=checkbox],input[type=radio]{width:20px;height:20px}
 }
 </style>
+<link rel="manifest" href="manifest.webmanifest">
+<script>/* v73 : application installable + hors connexion (site web uniquement) */
+if(/^https:$/.test(location.protocol)&&'serviceWorker' in navigator&&!window.claude){addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})})}
+</script>
+<style id="v72tabs">/* v72 : barres d'onglets sur plusieurs lignes au lieu de se chevaucher / défiler */
+.seg{flex-wrap:wrap;overflow:visible;row-gap:3px;height:auto}
+.seg>button{flex:0 1 auto;min-width:0}
+.seg.ind>.si{display:none!important}
+.seg.ind>button.on{background:var(--accent)!important;background-image:var(--grad,none)!important;color:var(--accent-ink,#fff)!important;border-radius:7px}
+#stabs,.mh .seg,.vt .seg,.vt:not(.sub) .seg{display:flex!important;flex-wrap:wrap!important;width:100%;grid-template-columns:none}
+#stabs>button,.mh .seg>button,.vt .seg>button{flex:1 1 auto;border-radius:7px}
+@media (max-width:700px){#stabs>button,.vt .seg>button{flex:1 1 30%;padding:8px 6px}}
+</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightweight-charts/4.1.3/lightweight-charts.standalone.production.js"></script>
 
 <div class="wrap">

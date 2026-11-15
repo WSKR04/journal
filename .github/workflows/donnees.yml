@@ -25,7 +25,7 @@ jobs:
         env:
           FORCE: ${{ github.event_name == 'schedule' && '0' || '1' }}
         run: |
-          mkdir -p _site && cp index.html _site/ && touch _site/.nojekyll
+          mkdir -p _site && cp index.html _site/ && touch _site/.nojekyll && { cp -r web/. _site/ 2>/dev/null || true; }
           O="${GITHUB_REPOSITORY_OWNER,,}"; R="${GITHUB_REPOSITORY#*/}"
           if [ "${R,,}" = "$O.github.io" ]; then BASE="https://$O.github.io"; else BASE="https://$O.github.io/$R"; fi
           timeout 900 bash outils/maj_donnees.sh "$PWD/_site" "$BASE" || true
