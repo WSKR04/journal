@@ -974,6 +974,34 @@ label.chk{transition:color .2s ease}label.chk:has(input:checked){color:var(--mut
 #mfoot .svOk{color:var(--gain)!important;animation:fadeIn .35s ease}
 #mfoot .wrn{animation:fadeIn .25s ease}
 #mbody.nvU>*{animation:nvU .3s var(--ease,ease) both}#mbody.nvD>*{animation:nvD .3s var(--ease,ease) both}
+
+/* ===== v84 : palette Ctrl K, réglages, Playbook ===== */
+#cmdl.ci .cmdi{animation:rowIn .22s var(--ease,ease) both}
+#cmdl.ci .cmdi:nth-child(1){animation-delay:18ms}#cmdl.ci .cmdi:nth-child(2){animation-delay:36ms}#cmdl.ci .cmdi:nth-child(3){animation-delay:54ms}#cmdl.ci .cmdi:nth-child(4){animation-delay:72ms}#cmdl.ci .cmdi:nth-child(5){animation-delay:90ms}#cmdl.ci .cmdi:nth-child(6){animation-delay:108ms}#cmdl.ci .cmdi:nth-child(7){animation-delay:126ms}#cmdl.ci .cmdi:nth-child(8){animation-delay:144ms}
+.cmdi{transition:background-color .12s ease,border-color .12s ease,color .12s ease,transform .12s ease}.cmdi.on{transform:translateX(3px)}
+.pset{transition:border-color .2s ease,transform .15s ease}.pset:hover{transform:translateY(-1px)}.pset.pkOn{animation:pop .3s cubic-bezier(.3,1.4,.5,1)}
+.tgl.pkOn{animation:pop .3s cubic-bezier(.3,1.4,.5,1)}
+#pbCard.pbIn>*:not(header){animation:rowIn .3s var(--ease,ease) both}
+td.pbOk{animation:pbOk .7s ease}
+@keyframes pbOk{0%{background:color-mix(in srgb,var(--gain) 25%,transparent)}100%{background:transparent}}
+td.pbNo{animation:pbNo .7s ease}
+
+/* ===== v85 : barre latérale, en-tête, bandeau de news ===== */
+#sideNav .snInd{position:absolute;width:3px;border-radius:0 3px 3px 0;background:var(--accent);pointer-events:none;transition:top .32s var(--ease,ease),height .32s var(--ease,ease)}
+#sideNav.hasInd button.on::before{display:none}
+#todayPill.pp b,#todayPill.pp i{animation:pop .35s cubic-bezier(.3,1.4,.5,1)}
+.nbar.nbIn{animation:nbIn .38s var(--ease,ease) both}
+
+/* ===== v86 : apprentissage, navigation mobile, Alfred ===== */
+#mchips button{transition:background-color .2s ease,color .2s ease,border-color .2s ease}
+#mchips button.on{animation:pop .3s cubic-bezier(.3,1.4,.5,1)}
+.lrIn{animation:lrIn .4s var(--ease,ease)}
+@keyframes lrIn{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--gain) 45%,transparent)}100%{box-shadow:0 0 0 10px transparent}}
+.lrst{transition:border-color .2s ease,background-color .2s ease}
+#alfDockOut{position:fixed;pointer-events:none;animation:dockOut .18s ease forwards;z-index:40}
+@keyframes dockOut{to{transform:translateX(40px);opacity:0}}
+@keyframes nbIn{from{opacity:0;transform:translateY(-8px)}}
+@keyframes pbNo{0%{background:color-mix(in srgb,var(--muted) 18%,transparent)}100%{background:transparent}}
 @keyframes nvU{from{opacity:0;transform:translateY(-12px)}}@keyframes nvD{from{opacity:0;transform:translateY(12px)}}
 #tradesCard.tfIn tbody tr:nth-child(1){animation-delay:18ms}#tradesCard.tfIn tbody tr:nth-child(2){animation-delay:36ms}#tradesCard.tfIn tbody tr:nth-child(3){animation-delay:54ms}#tradesCard.tfIn tbody tr:nth-child(4){animation-delay:72ms}#tradesCard.tfIn tbody tr:nth-child(5){animation-delay:90ms}#tradesCard.tfIn tbody tr:nth-child(6){animation-delay:108ms}#tradesCard.tfIn tbody tr:nth-child(7){animation-delay:126ms}#tradesCard.tfIn tbody tr:nth-child(8){animation-delay:144ms}#tradesCard.tfIn tbody tr:nth-child(9){animation-delay:162ms}#tradesCard.tfIn tbody tr:nth-child(10){animation-delay:180ms}#tradesCard.tfIn tbody tr:nth-child(11){animation-delay:198ms}#tradesCard.tfIn tbody tr:nth-child(12){animation-delay:216ms}
 </style>
@@ -1022,7 +1050,7 @@ label.chk{transition:color .2s ease}label.chk:has(input:checked){color:var(--mut
 </div>
 <button class="fab" data-act="new" data-need="acct" aria-label="Nouveau trade">+</button>
 <nav class="side-nav" id="sideNav" aria-label="Pages du terminal"></nav>
-<nav class="tabbar" id="tabbar" aria-label="Navigation principale"><button type="button" data-act="view" data-v="dash"><span><svg class="ic" viewBox="0 0 24 24" width="1.15em" height="1.15em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V5M4 19h16M8 15l4-5 3 3 4-6"/></svg></span>Résultats</button><button type="button" data-act="view" data-v="live"><span><svg class="ic" viewBox="0 0 24 24" width="1.15em" height="1.15em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l3-7 4 14 3-7h4"/></svg></span>Séance</button><button type="button" class="add" data-act="new" data-need="acct" aria-label="Nouveau trade"><span>＋</span>Trade</button><button type="button" data-act="view" data-v="news"><span><svg class="ic" viewBox="0 0 24 24" width="1.15em" height="1.15em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5h11v14H5zM16 9h3v8a2 2 0 0 1-2 2H7M8 9h5M8 12.5h5M8 16h5"/></svg></span>News</button><button type="button" data-act="view" data-v="learn"><span><svg class="ic" viewBox="0 0 24 24" width="1.15em" height="1.15em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19V6a2 2 0 0 1 2-2h12v13H7a2 2 0 0 0 0 4h12"/></svg></span>Learn</button><button type="button" data-act="menu"><span>☰</span>Menu</button></nav>
+<nav class="tabbar" id="tabbar" aria-label="Navigation principale"><button type="button" data-act="view" data-v="dash"><span><svg class="ic" viewBox="0 0 24 24" width="1.15em" height="1.15em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V5M4 19h16M8 15l4-5 3 3 4-6"/></svg></span>Résultats</button><button type="button" data-act="view" data-v="live"><span><svg class="ic" viewBox="0 0 24 24" width="1.15em" height="1.15em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l3-7 4 14 3-7h4"/></svg></span>Séance</button><button type="button" class="add" data-act="new" data-need="acct" aria-label="Nouveau trade"><span>+</span>Trade</button><button type="button" data-act="view" data-v="news"><span><svg class="ic" viewBox="0 0 24 24" width="1.15em" height="1.15em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5h11v14H5zM16 9h3v8a2 2 0 0 1-2 2H7M8 9h5M8 12.5h5M8 16h5"/></svg></span>News</button><button type="button" data-act="view" data-v="learn"><span><svg class="ic" viewBox="0 0 24 24" width="1.15em" height="1.15em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19V6a2 2 0 0 1 2-2h12v13H7a2 2 0 0 0 0 4h12"/></svg></span>Learn</button><button type="button" data-act="menu"><span>☰</span>Menu</button></nav>
 <div id="modal" class="ov" hidden></div>
 <div id="toast" class="toast" hidden></div>
 
@@ -3075,7 +3103,7 @@ function drawStart(){var el=$('#startCard');if(!el)return;var td=today(),now=now
    '<div class="actions" style="margin-bottom:10px">'+sess+'</div>'+
    (rt.length?'<div style="margin-bottom:10px">'+rt.slice(0,3).map(function(r){return '<div class="rule '+r[0]+'"><span class="pill '+(r[0]==='r'?'loss':'warn')+'">'+(r[0]==='r'?'ROUGE':'ORANGE')+'</span><span>'+esc(r[1])+'</span></div>'}).join('')+'</div>':'')+
    (cand?'<div class="rule" style="margin-bottom:12px"><span class="pill acc">Piste</span><span><b>'+esc(cand.sym)+'</b> : sentiment '+esc(cand.sf.lab.toLowerCase())+' ('+(cand.sf.sc>0?'+':'')+fmt(cand.sf.sc,1)+'), pas de news forte dans l\'heure. Lecture indicative de tes données, pas un conseil.</span></div>':'<div class="mut sm" style="margin-bottom:12px">Note le régime, les facteurs du jour ou tes tendances D1/H4/H1 (onglet News) pour que le classement des paires devienne parlant.</div>')+
-   '<div class="actions" style="margin-bottom:8px;justify-content:space-between"><span class="lbl">★ Mes favoris ('+L.length+')</span><span class="actions"><span class="seg" role="group" aria-label="Tri"><button type="button" data-act="stSort" data-v="sc"'+(S.stSort!=='news'&&S.stSort!=='az'?' class="on"':'')+'>Sentiment</button><button type="button" data-act="stSort" data-v="news"'+(S.stSort==='news'?' class="on"':'')+'>News</button><button type="button" data-act="stSort" data-v="az"'+(S.stSort==='az'?' class="on"':'')+'>A→Z</button></span><input id="wl-add" type="hidden" value="">'+ipkBtn('wl-add','＋ Ajouter un favori')+'</span></div>'+
+   '<div class="actions" style="margin-bottom:8px;justify-content:space-between"><span class="lbl">★ Mes favoris ('+L.length+')</span><span class="actions"><span class="seg" role="group" aria-label="Tri"><button type="button" data-act="stSort" data-v="sc"'+(S.stSort!=='news'&&S.stSort!=='az'?' class="on"':'')+'>Sentiment</button><button type="button" data-act="stSort" data-v="news"'+(S.stSort==='news'?' class="on"':'')+'>News</button><button type="button" data-act="stSort" data-v="az"'+(S.stSort==='az'?' class="on"':'')+'>A→Z</button></span><input id="wl-add" type="hidden" value="">'+ipkBtn('wl-add','+ Ajouter un favori')+'</span></div>'+
    '<div class="stl">'+rows.map(row).join('')+'</div>'+
    '<div class="mut sm" style="margin-top:8px">Choisis la paire à trader : le calculateur, les niveaux clés et le sentiment détaillé passent sur cette paire (onglet « Trader »). Tu peux en changer à tout moment.</div>'}
 function vLive(v){
@@ -3633,18 +3661,18 @@ function lrCard(c){var dn=!!LRP.done[c.k];
    '<div class="lrg'+(c.fig?'':' nf')+'"><div class="lrt">'+(c.k==='time'?lrKz():c.body)+'</div>'+(c.fig?'<figure class="lrf">'+c.fig()+(c.cap?'<figcaption>'+c.cap+'</figcaption>':'')+'</figure>':'')+'</div>'+
    '<div class="lrk"><div class="lbl">Rappels clés</div><ul>'+c.keys.map(lrLi).join('')+'</ul></div>'+
    '<div class="lrm" data-k="'+c.k+'"></div></div>'}
-function lrMineHtml(k){var L=lrnDocs(k);return '<div class="lbl">Mes rappels ('+L.length+')</div>'+(L.length?'<div class="lrl">'+L.map(lrItem).join('')+'</div>':'')+'<button type="button" class="btn sm" data-act="lrNew" data-v="'+k+'">＋ Ajouter mon rappel</button>'}
+function lrMineHtml(k){var L=lrnDocs(k);return '<div class="lbl">Mes rappels ('+L.length+')</div>'+(L.length?'<div class="lrl">'+L.map(lrItem).join('')+'</div>':'')+'<button type="button" class="btn sm" data-act="lrNew" data-v="'+k+'">+ Ajouter mon rappel</button>'}
 function lrRoad(){var n=LRN.filter(function(c){return LRP.done[c.k]}).length,pc=Math.round(n/LRN.length*100);
-  return '<div class="card c12" id="lrRoad"><header><h2 data-dec="1">Roadmap</h2><div class="actions"><span class="pill '+(n===LRN.length?'gain':'acc')+'">'+n+' / '+LRN.length+' compris</span><button type="button" class="btn sm primary" data-act="lrNew" data-v="system">＋ Ajouter mon système</button></div></header>'+
+  return '<div class="card c12" id="lrRoad"><header><h2 data-dec="1">Roadmap</h2><div class="actions"><span class="pill '+(n===LRN.length?'gain':'acc')+'">'+n+' / '+LRN.length+' compris</span><button type="button" class="btn sm primary" data-act="lrNew" data-v="system">+ Ajouter mon système</button></div></header>'+
    '<div class="lrbar" role="progressbar" aria-valuenow="'+pc+'" aria-valuemin="0" aria-valuemax="100"><i style="width:'+pc+'%"></i></div>'+
    '<p class="sm" style="margin:12px 0">Ton aide-mémoire Smart Money / ICT. Chaque fiche : théorie, schéma, rappels clés, puis <b>tes propres rappels</b> (texte, captures, graphiques, checklists). Comment tout s’enchaîne :</p>'+
    '<div class="lrflow">'+[['Biais HTF','struct'],['Liquidité ciblée','liq'],['Killzone','time'],['Sweep','liq'],['MSS + displacement','struct'],['Entrée FVG / OB','fvg'],['Discount / premium','pd'],['Stop · cible · taille','risk']].map(function(x,i){return '<button type="button" class="lrstp" data-act="sub" data-v="'+x[1]+'"><i>'+(i+1)+'</i>'+x[0]+'</button>'}).join('<span class="lrar" aria-hidden="true">→</span>')+'</div>'+
    '<div class="lrsteps">'+LRN.map(function(c,i){var d=!!LRP.done[c.k];return '<button type="button" class="lrst'+(d?' on':'')+'" data-act="sub" data-v="'+c.k+'"><span class="lrck">'+(d?'✓':(i+1))+'</span><span><b>'+c.t+'</b><small class="mut">'+c.tag+'</small></span></button>'}).join('')+'</div></div>'}
 function lrGloss(){return '<div class="card c12" id="lrGloss"><header><h2 data-dec="1">Glossary</h2></header><dl class="kv lrgl">'+LGL.map(function(g){return '<dt><b class="mono">'+esc(g[0])+'</b></dt><dd>'+esc(g[1])+'</dd>'}).join('')+'</dl></div>'}
 function drawLrMine(){var el=$('#lrMine');if(el){var all=lrnDocs(),cs=LCAT.filter(function(c){return all.some(function(d){return d.cat===c[0]})}),f=S.lrF&&cs.some(function(c){return c[0]===S.lrF})?S.lrF:'',L=f?all.filter(function(d){return d.cat===f}):all;
-    el.innerHTML='<header><h2 data-dec="1">My Systems</h2><div class="actions"><button type="button" class="btn sm primary" data-act="lrNew" data-v="system">＋ Nouveau</button></div></header>'+
+    el.innerHTML='<header><h2 data-dec="1">My Systems</h2><div class="actions"><button type="button" class="btn sm primary" data-act="lrNew" data-v="system">+ Nouveau</button></div></header>'+
      (all.length?(cs.length>1?'<div style="margin-bottom:12px">'+seg('lrF',f,[['','Tout ('+all.length+')']].concat(cs.map(function(c){return [c[0],c[1]]})))+'</div>':'')+'<div class="lrl big">'+L.map(lrItem).join('')+'</div>':
-      '<div class="lrempty"><b>Ajoute tes systèmes et tes rappels</b><p class="mut sm">Texte, captures TradingView, graphiques depuis tes données, checklists… Tout est enregistré avec ton journal et inclus dans tes sauvegardes.</p><button type="button" class="btn primary" data-act="lrNew" data-v="system">＋ Créer mon premier système</button></div>')}
+      '<div class="lrempty"><b>Ajoute tes systèmes et tes rappels</b><p class="mut sm">Texte, captures TradingView, graphiques depuis tes données, checklists… Tout est enregistré avec ton journal et inclus dans tes sauvegardes.</p><button type="button" class="btn primary" data-act="lrNew" data-v="system">+ Créer mon premier système</button></div>')}
   $$('.lrm[data-k]').forEach(function(m){m.innerHTML=lrMineHtml(m.dataset.k)})}
 function vLearn(v){lrpSync();v.innerHTML='<div class="dash">'+lrRoad()+LRN.map(lrCard).join('')+'<div class="card c12" id="lrMine"></div>'+lrGloss()+'</div>';drawLrMine();applySub()}
 /* --- éditeur / lecteur de rappels --- */
@@ -4830,6 +4858,31 @@ document.addEventListener('click',function(e){var el=e.target.closest&&e.target.
   if(r===false){pp($('#modal .box'),'shk',450);var t=S.draft||{},i=$('#f-instrument');if(i&&!t.instrument){i.classList.add('fMiss');i.focus()}if(!t.sens){var g=$('[data-grp="sens"]');if(g)g.classList.add('fMiss')}}
   else if(r&&!REDM()){var f=$('#mfoot>span');if(f)f.classList.add('svOk')}}catch(e){}return r};
 })();
+/* ---------- v84 : palette, réglages, Playbook ---------- */
+(function(){
+ function pp(el,c,ms){if(!el||REDM())return;el.classList.remove(c);void el.offsetWidth;el.classList.add(c);setTimeout(function(){el.classList.remove(c)},ms||600)}
+ var CQ=null;var _dc=drawCmd;drawCmd=function(){_dc.apply(this,arguments);try{var q=S.cmdQ||'';if(q!==CQ)pp($('#cmdl'),'ci',400);CQ=q}catch(e){}};
+ var _oc=openCmd;openCmd=function(){CQ=null;_oc.apply(this,arguments)};
+ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.pset,.tgl');if(!b)return;setTimeout(function(){var x=null;if(b.isConnected)x=b;else if(b.dataset&&b.dataset.act){$$('[data-act="'+b.dataset.act+'"]').forEach(function(y){if(y.dataset.v===b.dataset.v)x=y})}pp(x,'pkOn',350)},0)});
+ document.addEventListener('change',function(e){var el=e.target;if(!el||!el.dataset||el.dataset.pbt===undefined)return;var id=el.dataset.pbt,i=el.dataset.pbi,on=el.checked;setTimeout(function(){var td=null;$$('input[data-pbt]').forEach(function(x){if(x.dataset.pbt===id&&x.dataset.pbi===i)td=x.closest('td')});pp(td,on?'pbOk':'pbNo',750)},0)});
+ var PE=null;var _pb=drawPb;drawPb=function(){_pb.apply(this,arguments);try{var q=pbq(),g=String(q.edit||'')+'|'+String(q.open||''),o=PE;PE=g;var v=$('#view');if(o!=null&&o!==g&&!(v&&v.classList.contains('anim')))pp($('#pbCard'),'pbIn',450)}catch(e){}};
+})();
+/* ---------- v85 : barre latérale, en-tête, bandeau de news ---------- */
+(function(){
+ var IT=null;
+ function ind(){try{var n=$('#sideNav');if(!n||!n.offsetParent&&getComputedStyle(n).position!=='fixed')return;var b=n.querySelector('button.on');var d=n.querySelector('.snInd');if(!b){if(d)d.remove();n.classList.remove('hasInd');return}
+  if(!d){d=document.createElement('i');d.className='snInd';d.setAttribute('aria-hidden','true');n.appendChild(d);if(IT!=null&&!REDM()){d.style.transition='none';d.style.top=IT.t+'px';d.style.height=IT.h+'px';d.style.left=IT.l+'px';void d.offsetWidth;d.style.transition=''}}
+  var t=b.offsetTop+5,h=Math.max(8,b.offsetHeight-10),l=b.offsetLeft-10;d.style.left=l+'px';d.style.top=t+'px';d.style.height=h+'px';n.classList.add('hasInd');IT={t:t,h:h,l:l}}catch(e){}}
+ var _sn=drawSideNav;drawSideNav=function(){_sn.apply(this,arguments);ind()};
+ window.addEventListener('resize',function(){IT=null;var d=$('#sideNav .snInd');if(d)d.remove();ind()});
+ var TP=null;var _r=render;render=function(){_r();try{var p=$('#todayPill');if(!p)return;var t=p.textContent;if(TP!=null&&TP!==t&&!REDM()){p.classList.remove('pp');void p.offsetWidth;p.classList.add('pp');setTimeout(function(){p.classList.remove('pp')},400)}TP=t}catch(e){}};
+ var NB=null,NT=0;var _nb=drawNewsBar;drawNewsBar=function(){_nb.apply(this,arguments);try{var b=$('#newsBar .nbar');var g=b?b.className+'|'+((b.querySelector('b')||{}).textContent||''):'';if(g!==NB){NB=g;NT=g?Date.now():0}var el=Date.now()-NT;if(b&&NT&&el<400&&!REDM()){b.classList.add('nbIn');b.style.animationDelay=(-el)+'ms'}}catch(e){}};
+})();
+/* ---------- v86 : apprentissage, navigation mobile, Alfred ---------- */
+(function(){
+ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-act="lrDone"]');if(!b)return;var v=b.dataset.v;setTimeout(function(){try{if(REDM()||!LRP.done[v])return;var c=LRN.filter(function(x){return x.k===v})[0];var el=c&&document.getElementById(c.id);if(el){el.classList.remove('lrIn');void el.offsetWidth;el.classList.add('lrIn');setTimeout(function(){el.classList.remove('lrIn')},450)}}catch(x){}},0)});
+ var _ds=dockSet;dockSet=function(o){var d=$('#alfDock');try{if(!o&&d&&!d.hidden&&!REDM()){var r=d.getBoundingClientRect(),g=d.cloneNode(true);g.removeAttribute('id');g.querySelectorAll('[id]').forEach(function(x){x.removeAttribute('id')});g.id='alfDockOut';g.setAttribute('aria-hidden','true');g.style.cssText+='left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;height:'+r.height+'px;margin:0';var o0=document.getElementById('alfDockOut');if(o0)o0.remove();document.body.appendChild(g);setTimeout(function(){g.remove()},200)}}catch(e){}return _ds.apply(this,arguments)};
+})();
 setInterval(tick,1000);
 applyTheme();
 initStore().then(function(){setTimeout(function(){ffSync(false)},800);bkInit();mkLoad();nwLoad();mtLoad();dsLoad();macLoad();inLoad()});setInterval(macLoad,30*60*1000);setInterval(inLoad,5*60*1000);setInterval(dsLoad,30*60*1000);setInterval(nwLoad,60*1000);setInterval(mtLoad,3000);setInterval(mkLoad,10*60*1000);setInterval(function(){ffSync(false)},10*60000);
@@ -4956,14 +5009,14 @@ document.addEventListener('click',function(e){var el=e.target.closest&&e.target.
 var MTABS=[['prep','<svg class="ic" viewBox="0 0 24 24" width="1.15em" height="1.15em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l3-7 4 14 3-7h4"/></svg>','Séance',['Ma séance']],['overview','<svg class="ic" viewBox="0 0 24 24" width="1.15em" height="1.15em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg>','Marchés',['Marchés','Fondamentaux','Technique']],null,['calendar','<svg class="ic" viewBox="0 0 24 24" width="1.15em" height="1.15em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5h11v14H5zM16 9h3v8a2 2 0 0 1-2 2H7M8 9h5M8 12.5h5M8 16h5"/></svg>','Actus',['Actualités']],['track','<svg class="ic" viewBox="0 0 24 24" width="1.15em" height="1.15em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-4 5-5 8-5s6.5 1 8 5"/></svg>','Compte',['Compte']]];
 var MTL={};try{MTL=JSON.parse(localStorage.getItem('journal-mtab')||'{}')||{}}catch(e){}
 function mtabInit(){var n=$('#tabbar');if(!n||n.dataset.v64)return;n.dataset.v64=1;
- n.innerHTML=MTABS.map(function(t,i){if(!t)return '<button type="button" class="add" data-act="new" data-need="acct" aria-label="Nouveau trade"><span>＋</span>Trade</button>';return '<button type="button" data-act="mnav" data-v="'+i+'"><span>'+t[1]+'</span>'+t[2]+'</button>'}).join('')+'<button type="button" data-act="menu"><span>☰</span>Menu</button>';
+ n.innerHTML=MTABS.map(function(t,i){if(!t)return '<button type="button" class="add" data-act="new" data-need="acct" aria-label="Nouveau trade"><span>+</span>Trade</button>';return '<button type="button" data-act="mnav" data-v="'+i+'"><span>'+t[1]+'</span>'+t[2]+'</button>'}).join('')+'<button type="button" data-act="menu"><span>☰</span>Menu</button>';
  var c=document.createElement('nav');c.id='mchips';c.setAttribute('aria-label','Pages de la section');var m=$('#main');if(m)m.parentNode.insertBefore(c,m)}
 function mtabOf(g){for(var i=0;i<MTABS.length;i++)if(MTABS[i]&&MTABS[i][3].indexOf(g)>=0)return i;return -1}
 function mtabDraw(){mtabInit();var c=curPage();if(!c)return;var ti=mtabOf(c.g);if(ti>=0&&MTL[ti]!==c.id){MTL[ti]=c.id;try{localStorage.setItem('journal-mtab',JSON.stringify(MTL))}catch(e){}}
  $$('#tabbar [data-act="mnav"]').forEach(function(b){var o=+b.dataset.v===ti;b.classList.toggle('on',o);if(o)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
  var ch=$('#mchips');if(!ch)return;var key=c.id+'|'+ti;if(ch.dataset.k===key)return;ch.dataset.k=key;var gs=ti>=0?MTABS[ti][3]:[c.g],h='';
  PAGES.forEach(function(g){if(gs.indexOf(g[0])<0)return;if(gs.length>1)h+='<em>'+esc(g[0])+'</em>';g[1].forEach(function(p){h+='<button type="button" data-act="page" data-v="'+p[0]+'"'+(p[0]===c.id?' class="on" aria-current="page"':'')+'><span>'+p[1]+'</span>'+esc(p[2])+'</button>'})});
- ch.innerHTML=h;var on=ch.querySelector('.on');if(on)ch.scrollLeft=Math.max(0,on.offsetLeft-(ch.clientWidth-on.offsetWidth)/2)}
+ var _sl=ch.scrollLeft;ch.innerHTML=h;ch.scrollLeft=_sl;var on=ch.querySelector('.on');if(on){var _x=Math.max(0,on.offsetLeft-(ch.clientWidth-on.offsetWidth)/2);try{ch.scrollTo({left:_x,behavior:REDM()?'auto':'smooth'})}catch(e){ch.scrollLeft=_x}}}
 document.addEventListener('click',function(e){var el=e.target.closest&&e.target.closest('[data-act="mnav"]');if(!el)return;var t=MTABS[+el.dataset.v];if(!t)return;var cur=curPage(),same=mtabOf(cur.g)===+el.dataset.v;
  if(same){window.scrollTo({top:0,behavior:'smooth'});return}var id=MTL[el.dataset.v];setPage(id&&PG[id]?id:t[0])});
 var _v64r=render;render=function(){var r=_v64r.apply(this,arguments);try{mtabDraw();csUi()}catch(e){}return r};
@@ -5157,7 +5210,7 @@ function drawFin(){
    '<label class="sm">Montant ('+esc(CUR)+')<br><input id="finAmt" type="number" min="0" step="0.01" inputmode="decimal" style="width:110px" placeholder="0,00"></label>'+
    '<label class="sm">Compte / firme<br><input id="finAcc" list="finAccL" style="width:150px" maxlength="60" placeholder="ex. FTMO 100k"><datalist id="finAccL">'+names.concat(D.map(function(d){return d.acc||''})).filter(function(x,i,a){return x&&a.indexOf(x)===i}).map(function(n){return '<option value="'+esc(n)+'">'}).join('')+'</datalist></label>'+
    '<label class="sm" style="flex:1;min-width:140px">Note<br><input id="finNote" maxlength="140" style="width:100%" placeholder="optionnel"></label>'+
-   '<button class="btn primary" data-act="finAdd">＋ Ajouter</button></div>';
+   '<button class="btn primary" data-act="finAdd">+ Ajouter</button></div>';
   // budget
   var pc=bud>0?spM/bud*100:0;
   h+='<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px 28px"><div>'+
@@ -5219,7 +5272,7 @@ function pbStat(L){var n=L.length,w=L.filter(function(t){return (netOf(t)||0)>0}
 function pbKpi(lab,val,c){return '<div style="min-width:92px"><div class="mut sm">'+lab+'</div><div class="mono '+(c||'')+'" style="font-weight:600">'+val+'</div></div>'}
 function drawPb(){
   var el=$('#pbCard');if(!el)return;var Q=pbq(),P=pbDocs();
-  var h='<header><h2>Playbook</h2><button class="btn sm primary" data-act="pbNew">＋ Nouveau setup</button></header>'+
+  var h='<header><h2>Playbook</h2><button class="btn sm primary" data-act="pbNew">+ Nouveau setup</button></header>'+
    '<div class="mut sm" style="margin-bottom:10px">Décris chaque setup avec ses règles, puis coche sur tes trades les règles respectées : tu vois ce que rapporte la discipline, setup par setup.</div>';
   if(Q.edit){var d=Q.edit==='new'?{name:Q.pre||'',desc:'',rules:[]}:(S.news[Q.edit]||{});
     var names=SETUPS.concat(allClosed().map(function(t){return t.setup||''})).filter(function(x,i,a){return x&&a.indexOf(x)===i});
@@ -5230,7 +5283,7 @@ function drawPb(){
      '<div style="display:flex;gap:8px"><button class="btn primary" data-act="pbSave">Enregistrer</button><button class="btn" data-act="pbCancel">Annuler</button></div></div></div>'}
   if(!P.length&&!Q.edit){
     var used=allClosed().map(function(t){return t.setup||''}).filter(function(x,i,a){return x&&a.indexOf(x)===i});
-    el.innerHTML=h+'<div class="empty">Aucun setup dans ton playbook.'+(used.length?' Setups déjà utilisés : '+used.slice(0,6).map(function(u){return '<button class="btn sm" data-act="pbNew" data-v="'+esc(u)+'">＋ '+esc(u)+'</button>'}).join(' '):'')+'</div>';return}
+    el.innerHTML=h+'<div class="empty">Aucun setup dans ton playbook.'+(used.length?' Setups déjà utilisés : '+used.slice(0,6).map(function(u){return '<button class="btn sm" data-act="pbNew" data-v="'+esc(u)+'">+ '+esc(u)+'</button>'}).join(' '):'')+'</div>';return}
   var rows=P.map(function(p){
     var L=pbTrades(p),st=pbStat(L),sc=L.map(function(t){return pbScore(t,p)}).filter(function(x){return x!=null}),adh=sc.length?sum(sc)/sc.length*100:null;
     var full=L.filter(function(t){return pbScore(t,p)===1}),part=L.filter(function(t){var s=pbScore(t,p);return s!=null&&s<1}),sf=pbStat(full),sp=pbStat(part),op=Q.open===p.id,k=(p.rules||[]).length;
@@ -5248,7 +5301,7 @@ function drawPb(){
       else if(!L.length)r+='<div class="mut sm" style="margin-top:8px">Aucun trade clôturé avec le setup « '+esc(p.name)+' ».</div>'}
     return r+'</div>'}).join('');
   var have=P.map(function(p){return pbNorm(p.name)}),miss=allClosed().map(function(t){return t.setup||''}).filter(function(x,i,a){return x&&a.indexOf(x)===i&&have.indexOf(pbNorm(x))<0});
-  el.innerHTML=h+rows+(miss.length?'<div class="mut sm">Setups utilisés sans fiche : '+miss.slice(0,8).map(function(u){return '<button class="btn sm" data-act="pbNew" data-v="'+esc(u)+'">＋ '+esc(u)+'</button>'}).join(' ')+'</div>':'')}
+  el.innerHTML=h+rows+(miss.length?'<div class="mut sm">Setups utilisés sans fiche : '+miss.slice(0,8).map(function(u){return '<button class="btn sm" data-act="pbNew" data-v="'+esc(u)+'">+ '+esc(u)+'</button>'}).join(' ')+'</div>':'')}
 async function pbAct(a,el){var Q=pbq();
   if(a==='pbNew'){Q.edit='new';Q.pre=el.dataset.v||'';drawPb();var c=$('#pbCard');if(c)c.scrollIntoView({block:'start',behavior:'smooth'})}
   else if(a==='pbEdit'){Q.edit=el.dataset.id;drawPb()}
