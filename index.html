@@ -1000,6 +1000,14 @@ td.pbNo{animation:pbNo .7s ease}
 .lrst{transition:border-color .2s ease,background-color .2s ease}
 #alfDockOut{position:fixed;pointer-events:none;animation:dockOut .18s ease forwards;z-index:40}
 @keyframes dockOut{to{transform:translateX(40px);opacity:0}}
+
+/* ===== v87 : finition « terminal » — aplats, sans violet ni halos, arrondis homogènes ===== */
+:root,:root[data-theme="dark"],:root[data-theme="light"]{--vio:var(--accent);--glow:transparent}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--vio:var(--accent);--glow:transparent}}
+html::before{display:none!important}
+.card::after,.kpi::after,.banner::after{display:none!important}
+.box,.mh,.menu,.rule,.pset,.nbar,.ipk,#tipbox,.vt:not(.sub) .seg,.gs li,.toast,#toast,.ffm,.lrf,.lrk,.lri,.lrst,.lrmd>div,.lre,.lradd,.lrb-c,.strow,.srg>div,.acM,.alfdrop{border-radius:8px}
+.card:hover,.kpi:hover,.btn.primary,.btn.primary:hover:not(:disabled),#toast{box-shadow:none}
 @keyframes nbIn{from{opacity:0;transform:translateY(-8px)}}
 @keyframes pbNo{0%{background:color-mix(in srgb,var(--muted) 18%,transparent)}100%{background:transparent}}
 @keyframes nvU{from{opacity:0;transform:translateY(-12px)}}@keyframes nvD{from{opacity:0;transform:translateY(12px)}}
