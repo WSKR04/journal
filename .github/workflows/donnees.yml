@@ -20,7 +20,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url || steps.deploy2.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Préparer le site et les données
         env:
           FORCE: ${{ github.event_name == 'schedule' && '0' || '1' }}
@@ -30,16 +30,16 @@ jobs:
           O="${GITHUB_REPOSITORY_OWNER,,}"; R="${GITHUB_REPOSITORY#*/}"
           if [ "${R,,}" = "$O.github.io" ]; then BASE="https://$O.github.io"; else BASE="https://$O.github.io/$R"; fi
           timeout 900 bash outils/maj_donnees.sh "$PWD/_site" "$BASE" || true
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: _site
       - id: deploy
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
         continue-on-error: true
       # Réessai : GitHub ne retrouve parfois pas le paquet qu'il vient d'envoyer (erreur passagère)
       - if: steps.deploy.outcome == 'failure'
         run: sleep 45
       - id: deploy2
         if: steps.deploy.outcome == 'failure'
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
