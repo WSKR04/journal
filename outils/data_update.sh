@@ -13,7 +13,8 @@ J=$(curl -sG --max-time 60 -A "$UA" "https://publicreporting.cftc.gov/resource/6
   --data-urlencode "\$where=cftc_contract_market_code in($CODES) AND report_date_as_yyyy_mm_dd > '$(date -v-800d +%Y-%m-%d 2>/dev/null || date -d '-800 days' +%Y-%m-%d)'" \
   --data-urlencode "\$order=report_date_as_yyyy_mm_dd DESC" --data-urlencode "\$limit=5000")
 if ok "$J"; then printf 'window.COT_RAW={"ts":"%s","d":%s};\n' "$(date +%Y-%m-%dT%H:%M:%S)" "$J" > "$DIR/cot.js.tmp" && put cot.js && echo "$(date '+%F %T') cot ok" >> "$LOG"; else echo "$(date '+%F %T') cot échec" >> "$LOG"; fi
-# --- Saisonnalité : historique mensuel 20 ans (Yahoo)
+# --- Saisonnalité : historique mensuel 20 ans (Yahoo) — pas sur GitHub (Yahoo bloque ses serveurs ; marches_web.py s'en charge)
+if [ -z "$GITHUB_ACTIONS" ]; then
 SYMS="EURUSD:EURUSD=X GBPUSD:GBPUSD=X USDJPY:JPY=X USDCHF:CHF=X AUDUSD:AUDUSD=X USDCAD:CAD=X NZDUSD:NZDUSD=X DXY:DX-Y.NYB XAUUSD:GC=F XAGUSD:SI=F USOIL:CL=F US500:^GSPC NAS100:^NDX US30:^DJI GER40:^GDAXI BTCUSD:BTC-USD"
 OUT="$DIR/season.js.tmp"; printf 'window.SEAS_RAW={"ts":"%s","d":{' "$(date +%Y-%m-%dT%H:%M:%S)" > "$OUT"; first=1; n=0
 for p in $SYMS; do k="${p%%:*}"; y="${p#*:}"
@@ -23,6 +24,7 @@ for p in $SYMS; do k="${p%%:*}"; y="${p#*:}"
 done
 printf '}};\n' >> "$OUT"
 if [ $n -gt 0 ]; then put season.js; echo "$(date '+%F %T') saison ok ($n)" >> "$LOG"; else rm -f "$OUT"; echo "$(date '+%F %T') saison échec" >> "$LOG"; fi
+fi
 
 # --- Macro : Banque mondiale (annuel, 2001+) + BIS via DBnomics (taux directeurs, inflation mensuelle)
 OUT="$DIR/macro.js.tmp"; printf 'window.MACRO_RAW={"ts":"%s","wb":{' "$(date +%Y-%m-%dT%H:%M:%S)" > "$OUT"; first=1; n=0
@@ -36,7 +38,8 @@ P=$(curl -s --max-time 60 -A "$UA" "https://api.db.nomics.world/v22/series/BIS/W
 Q=$(curl -s --max-time 60 -A "$UA" "https://api.db.nomics.world/v22/series/BIS/WS_LONG_CPI/M.US.771+M.XM.771+M.GB.771+M.JP.771+M.CH.771+M.CA.771+M.AU.771+M.NZ.771+M.US.628+M.XM.628+M.GB.628+M.JP.628+M.CH.628+M.CA.628+M.AU.628+M.NZ.628?observations=1&format=json"); ok "$Q" || Q=null
 printf '},"ctry":%s,"pol":%s,"cpi":%s};\n' "$C" "$P" "$Q" >> "$OUT"
 if [ $n -gt 0 ] || [ "$P" != null ]; then put macro.js; echo "$(date '+%F %T') macro ok ($n)" >> "$LOG"; else rm -f "$OUT"; echo "$(date '+%F %T') macro échec" >> "$LOG"; fi
-# --- Fed Funds futures (Yahoo, CBOT) : 15 prochains mois → probabilités FOMC
+# --- Fed Funds futures (Yahoo, CBOT) : 15 prochains mois → probabilités FOMC — pas sur GitHub (marches_web.py : estimation FRED)
+if [ -z "$GITHUB_ACTIONS" ]; then
 OUT="$DIR/rates.js.tmp"; printf 'window.RATES_RAW={"ts":"%s","zq":{' "$(date +%Y-%m-%dT%H:%M:%S)" > "$OUT"; first=1; n=0
 MC=(F G H J K M N Q U V X Z); y=$(date +%Y); m=$((10#$(date +%m)))
 for i in $(seq 0 14); do mm=$(( (m-1+i)%12 )); yy=$(( y + (m-1+i)/12 )); t="ZQ${MC[$mm]}$(printf '%02d' $((yy%100))).CBT"
@@ -45,4 +48,5 @@ for i in $(seq 0 14); do mm=$(( (m-1+i)%12 )); yy=$(( y + (m-1+i)/12 )); t="ZQ${
 done
 printf '}};\n' >> "$OUT"
 if [ $n -gt 0 ]; then put rates.js; echo "$(date '+%F %T') rates ok ($n)" >> "$LOG"; else rm -f "$OUT"; echo "$(date '+%F %T') rates échec" >> "$LOG"; fi
+fi
 tail -n 200 "$LOG" > "$LOG.t" && mv -f "$LOG.t" "$LOG"

@@ -19,6 +19,7 @@ if [ "$F" = 1 ] || { [ $((H % 6)) -eq 0 ] && [ $M -lt 15 ]; } || [ ! -f "$P/cot.
 # 4b) Cours (Kraken + FRED, sans clé) : bougies 1 h à chaque passage, journalier toutes les heures, saisonnalité toutes les 6 h
 Y="intraday"; if [ "$F" = 1 ] || [ $M -lt 15 ] || [ ! -f "$P/market.js" ]; then Y="$Y market"; fi
 if [ "$F" = 1 ] || { [ $((H % 6)) -eq 0 ] && [ $M -lt 15 ]; } || [ ! -f "$P/season.js" ]; then Y="$Y season"; fi
+if [ "$F" = 1 ] || [ $M -lt 15 ] || [ ! -f "$P/rates.js" ]; then Y="$Y rates"; fi
 python3 "$HERE/marches_web.py" "$D" $Y || true
 # 5) Publier : données fraîches, sinon les précédentes
 for f in $FILES; do

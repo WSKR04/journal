@@ -178,8 +178,25 @@ def season(D):
         except Exception as e:log('kraken saison',k,'échec',e)
     log('saison',len(d),'actifs :',' '.join(sorted(d)))
     if d:put(D,'season.js','SEAS_RAW',{'ts':ts().split('+')[0][:19],'d':d})
+def rates(D):
+    # Trajectoire attendue des Fed Funds estimée par la courbe des bons du Trésor (FRED), recalée sur le taux effectif (EFFR).
+    since=(datetime.date.today()-datetime.timedelta(days=20)).isoformat();L={}
+    for k,sid in (('ef','EFFR'),('m1','DGS1MO'),('m3','DGS3MO'),('m6','DGS6MO'),('y1','DGS1')):
+        try:
+            s=fred(sid,since)
+            if s:L[k]=s[max(s)][3]
+        except Exception as e:log('fred rates',sid,'échec',e)
+    if not all(k in L for k in ('ef','m1','m3','m6','y1')):log('rates : données FRED incomplètes',sorted(L));return
+    off=L['ef']-L['m1']  # écart bons du Trésor / Fed Funds
+    seg=[(0,1,L['m1']),(1,3,(3*L['m3']-L['m1'])/2),(3,6,(6*L['m6']-3*L['m3'])/3),(6,12,(12*L['y1']-6*L['m6'])/6),(12,15,(12*L['y1']-6*L['m6'])/6)]
+    today=datetime.date.today();zq={}
+    for i in range(15):
+        f=[v for a,b,v in seg if a<=i<b][0]+off;y=today.year+(today.month-1+i)//12;m=(today.month-1+i)%12+1
+        zq['%04d-%02d'%(y,m)]={'chart':{'result':[{'meta':{'regularMarketPrice':round(100-f,4)}}]}}
+    log('rates estimés (FRED) : EFFR %.2f, 1M %.2f, 3M %.2f, 6M %.2f, 1A %.2f'%(L['ef'],L['m1'],L['m3'],L['m6'],L['y1']))
+    put(D,'rates.js','RATES_RAW',{'ts':ts().split('+')[0][:19],'src':'fred','zq':zq})
 if __name__=='__main__':
     D=sys.argv[1]
     for m in sys.argv[2:]:
-        try:{'market':market,'intraday':intraday,'season':season}[m](D)
+        try:{'market':market,'intraday':intraday,'season':season,'rates':rates}[m](D)
         except Exception as e:log(m,'échec',e)
