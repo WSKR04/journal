@@ -24,6 +24,7 @@ jobs:
       - name: Préparer le site et les données
         env:
           FORCE: ${{ github.event_name == 'schedule' && '0' || '1' }}
+          FRED_KEY: ${{ secrets.FRED_KEY }}
         run: |
           mkdir -p _site && cp index.html _site/ && touch _site/.nojekyll && { cp -r web/. _site/ 2>/dev/null || true; }
           O="${GITHUB_REPOSITORY_OWNER,,}"; R="${GITHUB_REPOSITORY#*/}"

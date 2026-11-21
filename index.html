@@ -1001,6 +1001,14 @@ td.pbNo{animation:pbNo .7s ease}
 #alfDockOut{position:fixed;pointer-events:none;animation:dockOut .18s ease forwards;z-index:40}
 @keyframes dockOut{to{transform:translateX(40px);opacity:0}}
 
+/* ===== v88 : alertes de prix sur les niveaux clés ===== */
+.lvpx{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:-2px 0 10px;font-size:12.5px;color:var(--muted)}
+.lvpx b{font:600 14px var(--f-mono);color:var(--fg)}
+.lvd{font:500 11.5px var(--f-mono);color:var(--muted);min-width:64px;text-align:right}
+.lvd.nr{color:var(--warn)}
+.lvHit{animation:lvHit 1.6s ease}
+@keyframes lvHit{0%{background:color-mix(in srgb,var(--warn) 30%,transparent)}100%{background:transparent}}
+
 /* ===== v87 : finition « terminal » — aplats, sans violet ni halos, arrondis homogènes ===== */
 :root,:root[data-theme="dark"],:root[data-theme="light"]{--vio:var(--accent);--glow:transparent}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--vio:var(--accent);--glow:transparent}}
@@ -4890,6 +4898,26 @@ document.addEventListener('click',function(e){var el=e.target.closest&&e.target.
 (function(){
  document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-act="lrDone"]');if(!b)return;var v=b.dataset.v;setTimeout(function(){try{if(REDM()||!LRP.done[v])return;var c=LRN.filter(function(x){return x.k===v})[0];var el=c&&document.getElementById(c.id);if(el){el.classList.remove('lrIn');void el.offsetWidth;el.classList.add('lrIn');setTimeout(function(){el.classList.remove('lrIn')},450)}}catch(x){}},0)});
  var _ds=dockSet;dockSet=function(o){var d=$('#alfDock');try{if(!o&&d&&!d.hidden&&!REDM()){var r=d.getBoundingClientRect(),g=d.cloneNode(true);g.removeAttribute('id');g.querySelectorAll('[id]').forEach(function(x){x.removeAttribute('id')});g.id='alfDockOut';g.setAttribute('aria-hidden','true');g.style.cssText+='left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;height:'+r.height+'px;margin:0';var o0=document.getElementById('alfDockOut');if(o0)o0.remove();document.body.appendChild(g);setTimeout(function(){g.remove()},200)}}catch(e){}return _ds.apply(this,arguments)};
+})();
+/* ---------- v88 : alertes de prix sur les niveaux clés ---------- */
+(function(){
+ function pxNow(sym){try{
+  if(MT.d&&MT.d.q&&typeof mtLive==='function'&&mtLive()){var q=MT.d.q.filter(function(x){return normInstr(x.sym)===sym})[0];if(q&&isFinite(q.b)&&q.b>0)return {p:q.b,src:'MT5 en direct'}}
+  var L=IN.d&&IN.d[sym];if(L&&L.length){var b=L[L.length-1];if(Date.now()-b[0]<4*3600000)return {p:b[4],src:'différé ~15 min'}}
+  var x=typeof mkS==='function'?mkS(sym):null;if(x&&x.last)return {p:x.last,src:'différé'}}catch(e){}return null}
+ window.__pxNow=pxNow;
+ function alOn(){return !S.settings||S.settings.lvAl!==false}
+ var PA={},FIRED={};
+ function check(){try{if(!alOn())return;var M=(S.settings&&S.settings.levels)||{};Object.keys(M).forEach(function(sym){var Ls=M[sym]||[];if(!Ls.length)return;var r=(window.__pxNow||pxNow)(sym);if(!r)return;var p=r.p,o=PA[sym];PA[sym]=p;if(o==null||o===p)return;
+  Ls.forEach(function(l){var lv=+l[0];if(!isFinite(lv))return;var up=o<lv&&p>=lv,dn=o>lv&&p<=lv;if(!up&&!dn)return;var key=sym+'|'+lv+'|'+(up?'u':'d');if(FIRED[key]&&Date.now()-FIRED[key]<30*60000)return;FIRED[key]=Date.now();
+   var msg=sym+' a franchi '+fmt(lv,prec(sym))+(up?' à la hausse':' à la baisse')+(l[1]?' ('+l[1]+')':'')+' · cours '+fmt(p,prec(sym));
+   toast(msg);try{if(S.beep)beepNow()}catch(e){}if(S.notif&&window.Notification&&Notification.permission==='granted'){try{new Notification('Niveau clé franchi',{body:msg})}catch(e){}}
+   var el=$('#lvlCard');if(el&&!REDM()){el.querySelectorAll('[data-p]').forEach(function(b){if(+b.dataset.p===lv){var r2=b.closest('.rowl');if(r2){r2.classList.remove('lvHit');void r2.offsetWidth;r2.classList.add('lvHit')}}})}})})}catch(e){}}
+ setInterval(check,20000);setTimeout(check,4000);window.__lvCheck=check;
+ var _dl=drawLevels;drawLevels=function(){_dl.apply(this,arguments);try{var el=$('#lvlCard');if(!el)return;var sym=String(S.lvSym||S.q.sym||quickInstr()[0]||'XAUUSD').toUpperCase().trim(),r=pxNow(sym),pr=prec(sym),on=alOn();
+  var h=el.querySelector('header');if(h)h.insertAdjacentHTML('afterend','<div class="lvpx">'+(r?'Cours <b>'+fmt(r.p,pr)+'</b><span>'+esc(r.src)+'</span>':'<span>Pas de cours disponible pour '+esc(sym)+'</span>')+'<span style="margin-left:auto;display:flex;align-items:center;gap:8px">Alerte au franchissement <button type="button" class="tgl'+(on?' on':'')+'" data-act="lvAl" role="switch" aria-checked="'+on+'" aria-label="Alerte quand le prix franchit un niveau"><i></i></button></span></div>');
+  if(r)el.querySelectorAll('.rowl button[data-p]').forEach(function(b){var lv=+b.dataset.p,d=(lv-r.p)/r.p*100;b.insertAdjacentHTML('beforebegin','<span class="lvd'+(Math.abs(d)<.15?' nr':'')+'" title="Distance au cours">'+(d>0?'+':'')+fmt(d,2)+' %</span>')})}catch(e){}};
+ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-act="lvAl"]');if(!b)return;S.settings.lvAl=!alOn();try{saveSettings()}catch(x){}drawLevels();toast(alOn()?'Alertes de prix activées':'Alertes de prix désactivées')});
 })();
 setInterval(tick,1000);
 applyTheme();

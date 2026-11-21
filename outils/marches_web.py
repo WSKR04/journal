@@ -22,8 +22,18 @@ def kraken(pair,itv):
     return {int(r[0]):(float(r[1]),float(r[2]),float(r[3]),float(r[4])) for r in j['result'][k]}
 # ---------- FRED ----------
 FB=[0]  # échecs FRED d'affilée : FRED ralentit parfois les serveurs cloud -> abandon rapide
+FK=os.environ.get('FRED_KEY','').strip()
 def fred(sid,since):
-    if FB[0]>=2:raise Exception('FRED injoignable depuis ce serveur, ignoré')
+    if FK:  # API officielle (clé gratuite) : fiable depuis GitHub
+        j=json.loads(get('https://api.stlouisfed.org/fred/series/observations?series_id=%s&api_key=%s&file_type=json&observation_start=%s'%(sid,FK,since),30,2));time.sleep(.6)
+        out={}
+        for o in j.get('observations',[]):
+            try:v=float(o['value'])
+            except (ValueError,KeyError):continue
+            d=datetime.datetime.strptime(o['date'][:10],'%Y-%m-%d').replace(tzinfo=datetime.timezone.utc)
+            out[int(d.timestamp())]=(v,v,v,v)
+        return out
+    if FB[0]>=2:raise Exception('FRED injoignable depuis ce serveur (ajoute le secret FRED_KEY), ignoré')
     try:t=get('https://fred.stlouisfed.org/graph/fredgraph.csv?id=%s&cosd=%s'%(sid,since),20,1);FB[0]=0
     except Exception:FB[0]+=1;raise
     time.sleep(.5)
@@ -34,6 +44,14 @@ def fred(sid,since):
         except ValueError:continue
         d=datetime.datetime.strptime(r[0][:10],'%Y-%m-%d').replace(tzinfo=datetime.timezone.utc)
         out[int(d.timestamp())]=(v,v,v,v)
+    return out
+# ---------- BCE via Frankfurter (sans clé, journalier) ----------
+def bce(base,quote,since):
+    j=json.loads(get('https://api.frankfurter.dev/v1/%s..?base=%s&symbols=%s'%(since,base,quote),30,2));time.sleep(.3)
+    out={}
+    for d,r in j.get('rates',{}).items():
+        v=r.get(quote)
+        if v:out[int(datetime.datetime.strptime(d,'%Y-%m-%d').replace(tzinfo=datetime.timezone.utc).timestamp())]=(v,v,v,v)
     return out
 # ---------- CBOE (indices US, VIX, taux 10 ans ; OHLC depuis 1975, sans clé) ----------
 CB={}
@@ -88,6 +106,7 @@ def crosses(S):
             if r:S[k]=r
     d=dxy(S)
     if d:S['DXY']=d
+FREDI={'US500':'SP500','NAS100':'NASDAQ100','US30':'DJIA','VIX':'VIXCLS','US10Y':'DGS10'}
 FREDD={'NZDUSD':'DEXUSNZ','USOIL':'DCOILWTICO','UKOIL':'DCOILBRENTEU','NATGAS':'DHHNGSP','JP225':'NIKKEI225'}
 def market(D):
     S={}
@@ -98,7 +117,10 @@ def market(D):
         try:S[k]=cboe(sy,m)
         except Exception as e:log('cboe',k,'échec',e)
     since=(datetime.date.today()-datetime.timedelta(days=200)).isoformat()
-    for k,sid in FREDD.items():
+    try:S['NZDUSD']=bce('NZD','USD',since)
+    except Exception as e:log('bce NZDUSD échec',e)
+    for k,sid in list(FREDI.items())+list(FREDD.items()):
+        if k in S and len(S[k])>5:continue
         try:S[k]=fred(sid,since)
         except Exception as e:log('fred',k,'échec',e)
     crosses(S)
@@ -138,7 +160,12 @@ def season(D):
         try:
             sy,m=CBS[k];s=monthly({t:v for t,v in cboe(sy,m).items() if t>=lim})
             if len(s)>24:d[k]=chart(k,s,'1mo')
-        except Exception as e:log('cboe saison',k,'échec',e)
+        except Exception as e:
+            log('cboe saison',k,'échec',e)
+            try:
+                s=monthly(fred(FREDI[k],since))
+                if len(s)>24:d[k]=chart(k,s,'1mo')
+            except Exception as e2:log('fred saison',k,'échec',e2)
     for k,(sid,_) in FREDL.items():
         try:
             s=monthly(fred(sid,since))
